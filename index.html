@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bitácora de Versos</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:italic,wght@0,400;1,700&family=Lora:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #fdfcf8;
+            --text: #2c2c2c;
+            --accent: #8b5e3c;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Lora', serif;
+            line-height: 1.8;
+            margin: 0;
+            padding: 0;
+            scroll-behavior: smooth; /* Para que el salto al poema sea fluido */
+        }
+
+        header {
+            text-align: center;
+            padding: 80px 20px;
+            background: #fff;
+            border-bottom: 1px solid #eee;
+        }
+
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            margin: 0;
+            font-weight: 400;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+
+        .poem {
+            margin-bottom: 150px;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 1s ease-out;
+            padding: 40px;
+            border-radius: 10px;
+        }
+
+        .poem.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Resaltado cuando se selecciona al azar */
+        .poem.highlight {
+            background-color: #fffaf0;
+            box-shadow: 0 0 20px rgba(139, 94, 60, 0.1);
+        }
+
+        .poem-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            color: var(--accent);
+            margin-bottom: 25px;
+        }
+
+        .poem-content {
+            white-space: pre-line;
+            font-size: 1.15rem;
+            border-left: 2px solid #eee;
+            padding-left: 30px;
+        }
+
+        /* Botón de Poema Aleatorio */
+        #random-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 15px 25px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            z-index: 1000;
+            transition: transform 0.3s;
+        }
+
+        #random-btn:hover {
+            transform: scale(1.1);
+        }
+
+        /* Control de Audio */
+        .audio-player {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            z-index: 1000;
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px;
+            font-size: 0.9rem;
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Mis Versos</h1>
+    <p><i>Un rincón para lo que el alma dicta.</i></p>
+</header>
+
+<div class="audio-player">
+    <audio id="bg-music" loop>
+        <source src="The Wisp Sings Intro Instrumental Looped.mp3" type="audio/mpeg">
+        Tu navegador no soporta el audio.
+    </audio>
+</div>
+
+<button id="random-btn" onclick="scrollToRandom()">✨ Verso al azar</button>
+
+<div class="container">
+    <article class="poem" id="p1">
+        <div class="poem-title">Primer Encuentro</div>
+        <div class="poem-content">
+            Escribir es desnudar el alma,
+            entre hojas blancas y tinta fría,
+            buscando siempre esa calma,
+            que solo otorga la poesía.
+        </div>
+    </article>
+
+    <article class="poem" id="p2">
+        <div class="poem-title">Lo que no alcanza</div>
+        <div class="poem-content">
+            Toda vez que mis pasos no vuelven por sus huellas 
+Es como no ver la luz al final del túnel 
+
+Es como cuando la borrasca no llega al vergel 
+
+Como cuando un ave herida de las alas no logra alcanzar las ramas delgadas del algarrobo 
+
+Como cuando las palabras se ahogan en el silencio y no llegan a la boca 
+
+O como cuando las lágrimas se quedan en el corazón y no logran llegar a los ojos
+        </div>
+    </article>
+
+    </div>
+
+<footer>
+    © 2026 - El Poeta del Café-V.A.
+</footer>
+
+<script>
+    // 1. Efecto de aparición al hacer scroll
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+            }
+        });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.poem').forEach(poem => {
+        observer.observe(poem);
+    });
+
+    // 2. Función de Poema Aleatorio
+    function scrollToRandom() {
+        const poems = document.querySelectorAll('.poem');
+        const randomIndex = Math.floor(Math.random() * poems.length);
+        const selectedPoem = poems[randomIndex];
+
+        // Quitar resaltado de otros
+        poems.forEach(p => p.classList.remove('highlight'));
+        
+        // Ir al poema y resaltarlo
+        selectedPoem.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        selectedPoem.classList.add('highlight');
+
+        // Intentar reproducir música si no ha empezado
+        const music = document.getElementById('bg-music');
+        music.play();
+    }
+</script>
+
+</body>
+</html>
